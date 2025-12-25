@@ -34,6 +34,7 @@ export const styles = StyleSheet.create({
         borderBottomWidth: 1,
         borderBottomColor: '#E4E6EC',
         paddingBottom: 12,
+        marginBottom: 12
     },
     clearButton: {
         marginLeft: 'auto'
