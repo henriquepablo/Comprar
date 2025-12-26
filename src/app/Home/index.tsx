@@ -1,15 +1,36 @@
-import { View, Image, TouchableOpacity, Text } from 'react-native';
+import { View, Image, TouchableOpacity, Text, FlatList } from 'react-native';
 import { Button } from '@/components/Button';
 import { styles } from './styles';
 import { Input } from '@/components/Input';
 import { Filter } from '@/components/Filter';
 import { FilterStatus } from "@/types/FilterStatus";
 import { Item } from '@/components/Item';
+import { useState } from 'react';
 
-const FILTER_STATUS: FilterStatus[] = [FilterStatus.PENDING, FilterStatus.DONE]
+const FILTER_STATUS: FilterStatus[] = [FilterStatus.PENDING, FilterStatus.DONE];
+const ITEMS = [
+    {
+        id: "1",
+        status: FilterStatus.DONE,
+        description: "1 pacote de café"
+    },
+    {
+        id: "2",
+        status: FilterStatus.PENDING,
+        description: "3 pacotes de macarrão"
+    },
+    {
+        id: "3",
+        status: FilterStatus.PENDING,
+        description: "3 cebolas"
+    },
+]
 
 
 export function Home() {
+
+    const [filter, setFilter] = useState<FilterStatus>(FilterStatus.PENDING);
+
     return (
         <View style={styles.container}>
             <Image source={require('@/assets/logo.png')} style={styles.logo} />
@@ -24,7 +45,12 @@ export function Home() {
                 <View style={styles.header}>
                     {
                         FILTER_STATUS.map((status) => (
-                            <Filter status={status} isActive={true} key={status}/>
+                            <Filter 
+                                key={status}
+                                status={status} 
+                                isActive={filter === status}
+                                onPress={() => setFilter(status)} 
+                            />
                         ))
                     }
 
@@ -35,9 +61,20 @@ export function Home() {
                     </TouchableOpacity>
                 </View>
 
-                <Item data={{ status: FilterStatus.DONE, description: "Café" }} 
-                    onStatus={() => console.log("mudar o status")}
-                    onRemove={() => console.log("remover")}
+                <FlatList 
+                    data={ITEMS}
+                    showsVerticalScrollIndicator={false}
+                    keyExtractor={item => item.id}
+                    renderItem={({item}) => (
+                        <Item
+                            data={item} 
+                            onStatus={() => console.log("mudar o status")}
+                            onRemove={() => console.log("remover")}
+                        />
+                    )}
+                    ItemSeparatorComponent={() => <View style={styles.separator} />}
+                    contentContainerStyle={styles.listContent}
+                    ListEmptyComponent={() => <Text style={styles.empty}>Nenhum item aqui.</Text>}
                 />
             </View>
         </View>

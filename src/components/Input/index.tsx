@@ -7,6 +7,10 @@ type Props = TextInputProps & {
 
 export function Input({...rest}: Props) {
     return (
-        <TextInput style={styles.container} {...rest} />
+        <TextInput 
+            placeholderTextColor='#74798B'
+            style={styles.container} 
+            {...rest} 
+            />
     )
 }
